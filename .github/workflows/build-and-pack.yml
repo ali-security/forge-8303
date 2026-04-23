@@ -10,23 +10,19 @@ on:
 jobs:
   build-and-pack:
     runs-on: ubuntu-latest
-    container:
-      image: node:6-alpine
-      options: --entrypoint sh
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install dependencies
-        shell: sh
-        run: npm install
-
-      - name: Build and pack
-        shell: sh
+      - name: Build and pack in node:6-alpine
         run: |
-          npm run build
-          npm pack
+          docker run --rm \
+            -v "${{ github.workspace }}:/work" \
+            -w /work \
+            --entrypoint sh \
+            node:6-alpine \
+            -c "npm install && npm run build && npm pack"
 
       - name: Upload .tgz artifact
         uses: actions/upload-artifact@v4
