@@ -30,3 +30,4 @@ jobs:
           name: node-forge-package
           path: '*.tgz'
           if-no-files-found: error
+          retention-days: 1
